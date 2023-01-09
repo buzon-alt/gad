@@ -1,0 +1,1 @@
+[06-Jul-2021 13:15:53 Asia/Manila] PHP Warning:  mysqli_num_rows() expects parameter 1 to be mysqli_result, boolean given in /home/d8262w2kuadn/public_html/hmpfile/php/results.php on line 8

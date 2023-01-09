@@ -1,0 +1,53 @@
+Users Side
+
+Search Filter
+-status
+-year
+-project title
+- department field admin side only
+ok na ni
+
+
+Sidebar user
+- display fullname of user
+ok
+
+Department Head Side
+-duplicate row
+fix
+
+
+Dashboard
+Clickable Card
+
+
+Add Project Form
+- transfer to Evaluation Form
+
+Evaluation Form
+head
+- remove project number - display project title and department
+below
+- status
+- attribution amount
+
+All List of Evaluation
+-Evaluatio
+-status
+-year
+-title
+
+
+EDit user
+add reset button - for reset password only or update username
+submit button - above field only to update
+
+
+
+ 
+
+
+
+
+
+

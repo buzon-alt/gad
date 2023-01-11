@@ -137,7 +137,7 @@ tr td{
                 
                     ?>
                   <label for="">Status:</label>
-                  <select class="form-control" name="status">
+                  <select class="form-control" name="status" style="width: 24%;">
                             <option value="">View All</option>
                             <option value="Pending" <?=$status == 'Pending' ? 'selected':''?>>Pending</option>
                             <option value="Evaluation 1 Complete" <?=$status == 'Evaluation 1 Complete' ? 'selected':''?>>Evaluation 1 Complete</option>
@@ -159,7 +159,7 @@ tr td{
                     ?>
                   </select>
                   <label for="">Project Title</label>
-                  <input type="text" class="form-control input-sm" name="project_title" value="<?=(isset($_GET['project_title'])? $_GET['project_title']:'');?>">
+                  <input style="width:17%;" type="text" class="form-control input-sm" name="project_title" value="<?=(isset($_GET['project_title'])? $_GET['project_title']:'');?>">
                 
                   <button type="submit" name="submit">Search</button>
                 </form>
@@ -229,7 +229,10 @@ tr td{
 
                             echo '<tr> 
                             <td class="text-nowrap">'.$value['project_title'].'</td>
-                            <td style="text-align:right;">'.number_format($value['project_cost'],2).'</td>
+                            <td style="display:flex; text-align:right;">
+                             <span>&#8369;</span>
+                             <span style="margin-left:2px;">'.number_format($value['project_cost'],2).'</span>
+                            </td>
                             <td>'.$value['department'].'</td>
                             <td class="text-nowrap">'.$value['name'].'</td>
                             <td class="text-nowrap">'.$value['project_duration'].'</td>

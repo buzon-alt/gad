@@ -138,7 +138,7 @@ tr td{
                     ?>
                   <label for="">Status:</label>
                   <select class="form-control" name="status">
-                            <option value=""></option>
+                            <option value="">View All</option>
                             <option value="Pending" <?=$status == 'Pending' ? 'selected':''?>>Pending</option>
                             <option value="Evaluation 1 Complete" <?=$status == 'Evaluation 1 Complete' ? 'selected':''?>>Evaluation 1 Complete</option>
                             <option value="Evaluation 1 Re-evaluate" <?=$status == 'Evaluation 1 Re-evaluate' ? 'selected':''?>>Evaluation 1 Re-evaluate</option>
@@ -172,7 +172,7 @@ tr td{
             </div>  
             <!-- /.row -->
             <div class="row">
-              <div class="col-md-12 table-responsive">
+              <div class="col-md-12 table-responsive" style="margin-top: 5px;">
                 <table class="table " style="border-top:2px solid #333!important; border:0px solid #ddd;">
                     <thead>
                       <tr> 

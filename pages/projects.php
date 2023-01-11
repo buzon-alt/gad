@@ -3,7 +3,7 @@ SESSION_START();
 
 $status = "";
 $department = $_SESSION['department'];
-$project_title = "";
+global $project_title;
 $year_submitted = 2022;  
 if (isset($_GET['submit'])) { 
   $status = $_GET['status'];
@@ -189,7 +189,6 @@ tr td{
                     </thead>
                     <tbody id="translist">
                       <?php 
-
                       $user_id = $_SESSION['user_id'];
                       if (!isset($_GET['submit'])) {
                         if ($_SESSION['usertype'] == 'Proponent' ) {
@@ -197,64 +196,58 @@ tr td{
                           $project = mysqli_query($con,"SELECT p.*,u.name FROM proponents LEFT JOIN projects as p ON proponents.project_id = p.id LEFT JOIN users as u ON p.project_leader = u.id where proponents.users_id = '$user_id' AND department = '$department'");
                         }
                         elseif ($_SESSION['usertype'] == 'Department Head') {
-                       
                           $project = mysqli_query($con,"SELECT projects.*,u.name FROM projects LEFT JOIN users as u ON projects.project_leader = u.id where  projects.department = '$department'");
-                        
                         }else {
                           $project = mysqli_query($con,"SELECT projects.*,u.name FROM projects LEFT JOIN users as u ON projects.project_leader = u.id ");
                         }
 
                       }else{
-                        
                         if ( $_SESSION['usertype'] == 'Proponent') {
                           $project = mysqli_query($con,"SELECT projects.*,u.name FROM projects LEFT JOIN proponents as p ON projects.id = p.project_id LEFT JOIN users as u ON projects.project_leader = u.id where project_title LIKE '%$project_title%' AND department = '$department' AND YEAR(date_submitted) = '$year_submitted' AND  p.users_id = '$user_id'");
-
-                          
                         }elseif ($_SESSION['usertype'] == 'Department Head') { 
                           // $project = mysqli_query($con,"SELECT projects.*,u.name FROM projects LEFT JOIN proponents as p ON projects.id = p.project_id LEFT JOIN users as u ON projects.project_leader = u.id where project_title LIKE '%$project_title%' AND department = '$department' AND YEAR(date_submitted) = '$year_submitted'  ");
-                          $project = mysqli_query($con,"SELECT projects.*,u.name FROM projects LEFT JOIN users as u ON projects.project_leader = u.id where (projects.department = '$department' AND YEAR(projects.date_submitted) = '$year_submitted'  AND projects.project_title LIKE '%$project_title%') or AND status = '$status'  ");
+                          if($status){
+                            $project = mysqli_query($con,"SELECT projects.*,u.name FROM projects LEFT JOIN users as u ON projects.project_leader = u.id where (projects.department = '$department' AND YEAR(projects.date_submitted) = '$year_submitted'  AND projects.project_title LIKE '%$project_title%') AND status = '$status'");
+                          }else{
+                            $project = mysqli_query($con,"SELECT projects.*,u.name FROM projects LEFT JOIN users as u ON projects.project_leader = u.id where (projects.department = '$department' AND YEAR(projects.date_submitted) = '$year_submitted'  AND projects.project_title LIKE '%$project_title%')");
+                          }
                         }else {
-
                           if ($status == 'Ongoing') {
                             $project = mysqli_query($con,"SELECT projects.*,u.name FROM projects LEFT JOIN users as u ON projects.project_leader = u.id where status <> 'Complete' AND status <> 'Pending' ");
                           }else {
                             $project = mysqli_query($con,"SELECT projects.*,u.name FROM projects LEFT JOIN users as u ON projects.project_leader = u.id where (projects.department = '$department' AND YEAR(projects.date_submitted) = '$year_submitted' AND projects.project_title LIKE '%$project_title%') OR status = '$status' ");
                           }
-                          
-                    
                         }
                         
                       }
  
                         while ($value = mysqli_fetch_array($project)) { 
+                            if ( $_SESSION['usertype'] == 'Proponent') {
+                              $projid = $value['id']; 
+                              mysqli_query($con,"UPDATE projects SET flag = '0' where id = '$projid'");
+                            }
 
-                          if ( $_SESSION['usertype'] == 'Proponent') {
-                            $projid = $value['id']; 
-                             mysqli_query($con,"UPDATE projects SET flag = '0' where id = '$projid'");
+                            echo '<tr> 
+                            <td class="text-nowrap">'.$value['project_title'].'</td>
+                            <td style="text-align:right;">'.number_format($value['project_cost'],2).'</td>
+                            <td>'.$value['department'].'</td>
+                            <td class="text-nowrap">'.$value['name'].'</td>
+                            <td class="text-nowrap">'.$value['project_duration'].'</td>
+                            <td class="text-nowrap">'.$value['project_location'].'</td>
+                            <td class="text-nowrap">'.$value['status'].'</td>
+                            <td class="text-nowrap">'.$value['date_submitted'].'</td>
+                            <td class="text-nowrap" style="text-align:center;">';
+
+                            if ($_SESSION['usertype'] == 'Administrator' ) {
+                              echo '<a href="editprojects.php?pid='.$value['id'].'&uid='.$value['project_leader'].'" class="btn btn-primary btn-sm">Edit</a>&nbsp;';
+                            }
+                          echo '<a href="evaluation.php?pid='.$value['id'].'&projecttype='.$value['project_type'].'" class="btn btn-primary btn-sm">View Evaluation</a> ';
+
+                          if ($_SESSION['usertype'] == 'Administrator' || $_SESSION['usertype'] == 'Proponent') {
+                            echo ' <a href="attachment.php?pid='.$value['id'].'&projecttype='.$value['project_type'].'" class="btn btn-primary btn-sm">Attachment</a>&nbsp;';
                           }
-                         
-                         
-                          echo '<tr> 
-                          <td class="text-nowrap">'.$value['project_title'].'</td>
-                          <td style="text-align:right;">'.number_format($value['project_cost'],2).'</td>
-                          <td>'.$value['department'].'</td>
-                          <td class="text-nowrap">'.$value['name'].'</td>
-                          <td class="text-nowrap">'.$value['project_duration'].'</td>
-                          <td class="text-nowrap">'.$value['project_location'].'</td>
-                          <td class="text-nowrap">'.$value['status'].'</td>
-                          <td class="text-nowrap">'.$value['date_submitted'].'</td>
-                          <td class="text-nowrap" style="text-align:center;">';
-
-                          if ($_SESSION['usertype'] == 'Administrator' ) {
-                            echo '<a href="editprojects.php?pid='.$value['id'].'" class="btn btn-primary btn-sm">Edit</a>&nbsp;';
-                          }
-                        echo '<a href="evaluation.php?pid='.$value['id'].'&projecttype='.$value['project_type'].'" class="btn btn-primary btn-sm">View Evaluation</a> ';
-
-                        if ($_SESSION['usertype'] == 'Administrator' || $_SESSION['usertype'] == 'Proponent') {
-                          echo ' <a href="attachment.php?pid='.$value['id'].'&projecttype='.$value['project_type'].'" class="btn btn-primary btn-sm">Attachment</a>&nbsp;';
-                        }
-                       echo'</td>
-                        </tr>';
+                        echo'</td>
+                          </tr>';
                         }
 
                       ?>

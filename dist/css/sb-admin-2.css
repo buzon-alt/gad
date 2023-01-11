@@ -406,6 +406,16 @@ table.dataTable thead .sorting:after {
 .timeline-body > p + p {
   margin-top: 5px;
 }
+#input_amount_wrapper1{
+  position: relative;
+}
+#input_amount_wrapper1 span.peso_symbol_1{
+  position: absolute;
+  left: 8%;
+  top: 52%;
+  padding: 0px 4px 0px 4px;
+  background-color: white;
+}
 @media (max-width: 767px) {
   ul.timeline:before {
     left: 40px;

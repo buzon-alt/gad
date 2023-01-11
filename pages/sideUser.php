@@ -44,12 +44,12 @@
                             <?php 
                                $user_id = $_SESSION['user_id'];
                          if ($_SESSION['usertype'] == 'Proponent' ) {
-                            $notif = 0;
-                            $countcomplete = mysqli_query($con,"SELECT projects.*,u.name FROM projects LEFT JOIN proponents as p ON projects.id = p.project_id LEFT JOIN users as u ON projects.project_leader = u.id where project_title LIKE '%$project_title%' AND department = '$department' AND YEAR(date_submitted) = '$year_submitted' AND  p.users_id = '$user_id' AND projects.flag = '1'");
-                            $notif = mysqli_num_rows($countcomplete);
+                            // $notif = 0;
+                            // $countcomplete = mysqli_query($con,"SELECT projects.*,u.name FROM projects LEFT JOIN proponents as p ON projects.id = p.project_id LEFT JOIN users as u ON projects.project_leader = u.id where project_title LIKE '%$project_title%' AND department = '$department' AND YEAR(date_submitted) = '$year_submitted' AND  p.users_id = '$user_id' AND projects.flag = '1'");
+                            // $notif = mysqli_num_rows($countcomplete);
                             ?>
 
-                            <span class="badge"><?=$notif;?></span>
+                            <span class="badge" style="display: none;"><?=$notif;?></span>
                             <?php   }  ?>
                         </a>
                         </li>

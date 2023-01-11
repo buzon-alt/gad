@@ -726,8 +726,9 @@ $status = $projectname['status'];
                                     <option value="Complete" <?=$status == 'Complete' ? 'selected':''?>>Complete</option>
                                 </select>
                         </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-3" id="input_amount_wrapper1">
                         <label for="">Attribution:</label>
+                        <span class="peso_symbol_1">&#8369;</span>
                         <input type="text"  class="form-control" id="attribution" value="0" disable>
                         </div>
                     <div class="col-md-12">

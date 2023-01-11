@@ -113,10 +113,10 @@ $project = mysqli_fetch_array($data);
                         <select class="form-control" name="project_leader" id="project_leader" required>
                             <option value="" disabled>-Select Project Leader-</option>
                             <?php
-                                $users = mysqli_query($con,"SELECT * FROM users where usertype <> 'Administrator' ");
+                                $users = mysqli_query($con,"SELECT * FROM users where id = '".$_GET['uid']."'");
                                 while ($value = mysqli_fetch_array($users)) { 
-                                $select = $project['id'] == $value['id'] ? 'selected' :'';
-                                echo '<option value="'.$value['id'].'" '.$select.' >'.$value['name'].'</option>';
+                                    $select = $project['id'] == $value['id'] ? 'selected' :'';
+                                    echo '<option value="'.$value['id'].'" '.$select.' >'.$value['name'].'</option>';
                                 }
                             ?>
                         </select>

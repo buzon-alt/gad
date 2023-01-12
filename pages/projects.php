@@ -137,6 +137,7 @@ tr td{
                     ?>
                   <label for="">Status:</label>
                   <select class="form-control" name="status" style="width: 24%;">
+                           
                             <option value="">View All</option>
                             <option value="Pending" <?=$status == 'Pending' ? 'selected':''?>>Pending</option>
                             <option value="Evaluation 1 Complete" <?=$status == 'Evaluation 1 Complete' ? 'selected':''?>>Evaluation 1 Complete</option>

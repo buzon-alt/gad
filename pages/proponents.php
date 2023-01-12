@@ -115,6 +115,7 @@ tr td{
                     <thead>
                       <tr>
                         <td>Name</td> 
+                        <td>Position</td> 
                         <td>Department/Office</td>
                         <td>Contact</td>
                         <td>Email Address</td>
@@ -129,6 +130,7 @@ tr td{
                         while ($value = mysqli_fetch_array($users)) { 
                           echo '<tr>
                           <td>'.$value['name'].'</td>
+                          <td>'.$value['usertype'].'</td>
                           <td>'.$value['office'].'</td>
                           <td>'.$value['contact'].'</td>
                           <td>'.$value['email'].'</td>

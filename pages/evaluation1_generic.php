@@ -570,7 +570,7 @@ $status = $projectname['status'];
                             </tbody>
                         </table>
                     </div>
-                    <di class="form-group col-md-3">
+                    <div class="form-group col-md-3">
                         <label for="">Status:</label>
                         <select class="form-control" name="status">
                                     <option value=""></option>
@@ -580,7 +580,7 @@ $status = $projectname['status'];
                                     <option value="Evaluation 2 Re-evaluate" <?=$status == 'Evaluation 2 Re-evaluate' ? 'selected':''?>>Evaluation 2 Re-evaluate</option>
                                     <option value="Complete" <?=$status == 'Complete' ? 'selected':''?>>Complete</option>
                                 </select>
-                        </di>
+                        </div>
                     <div class="form-group col-md-3" id="input_amount_wrapper1">
                         <label for="">Attribution:</label>
                         <span class="peso_symbol_1">&#8369;</span>

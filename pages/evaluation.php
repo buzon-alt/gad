@@ -128,9 +128,8 @@ SESSION_START();
                               <td>'.$value['date_created'].'</td>
                               <td>'.$value['interpretation'].'</td>
                               <td style="text-align:right; padding-right:50px;">
-                                <span>&#8369;</span>
-                                <span>'.number_format($value['attribution'],2).'</span>
-                              </td>
+                              <span>&#8369;</span>
+                              <span>'.number_format($value['attribution'],2).'</span></td>
                               <td>';
                               
                               if ($_SESSION["usertype"] == 'Administrator') {

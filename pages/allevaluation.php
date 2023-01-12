@@ -182,10 +182,9 @@ if (isset($_GET['submit'])) {
                               <td class="text-nowrap">'.$value['score'].'</td>
                               <td class="text-nowrap">'.$value['date_created'].'</td>
                               <td class="text-nowrap">'.$value['interpretation'].'</td>
-                              <td class="text-nowrap" style="text-align:right; padding-right:50px;">
-                                <span>&#8369;</span>
-                                <span>'.number_format($value['attribution'],2).'</span>
-                              </td>
+                              <td class="text-nowrap" style="text-align:left; padding-right:50px;">
+                              <span>&#8369;</span>
+                              <span>'.number_format($value['attribution'],2).'</span></td>
                               <td class="text-nowrap" > ';
                               
                               if ($_SESSION["usertype"] == 'Administrator') {

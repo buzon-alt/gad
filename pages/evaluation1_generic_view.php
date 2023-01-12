@@ -585,6 +585,7 @@ $status = $projectname['status'];
                         </div>
                     <div class="form-group col-md-3">
                         <label for="">Attribution:</label>
+                        <span class="peso_symbol_1">&#8369;</span>
                         <input type="text"  class="form-control" id="attribution" value="<?=$value['attribution']?>" disable>
                         </div>
                     <div class="col-md-12">

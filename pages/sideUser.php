@@ -53,7 +53,7 @@
                             <?php   }  ?>
                         </a>
                         </li>
-                        <?php  if ($_SESSION['usertype'] == 'Administrator' || $_SESSION['usertype'] == 'Department Head') {?>
+                        <?php  if ($_SESSION['usertype'] == 'Administrator') {?>
                         <li>
                             <a href="allevaluation.php"><i class="fa fa-check-square-o fa-fw"></i> Evaluations</a>
                         </li>

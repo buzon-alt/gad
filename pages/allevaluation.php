@@ -111,26 +111,20 @@ if (isset($_GET['submit'])) {
 
             <div class="col-md-12">
                 <form class="form-inline" action="" method="GET"> 
-                    
                     <label for="">Evaluation</label> 
                     <select class="form-control input-sm" name="evaluation" id="evaluation">
-                        <option value="" ></option> 
                         <option value="Evaluation 1" <?=$evaluation == 'Evaluation 1'? 'selected':''?> >Evaluation 1</option>
                         <option value="Evaluation 2" <?=$evaluation == 'Evaluation 2'? 'selected':''?> >Evaluation 2</option> 
                     </select>
-                  
-              
                         <label for="">Status:</label>
                         <select class="form-control" name="status">
-                                <option value=""></option>
+                                <option value="">View All</option>
                                 <option value="Pending" <?=$status == 'Pending' ? 'selected':''?>>Pending</option>
                                 <option value="Evaluation 1 Complete" <?=$status == 'Evaluation 1 Complete' ? 'selected':''?>>Evaluation 1 Complete</option>
                                 <option value="Evaluation 1 Re-evaluate" <?=$status == 'Evaluation 1 Re-evaluate' ? 'selected':''?>>Evaluation 1 Re-evaluate</option>
                                 <option value="Evaluation 2 Re-evaluate" <?=$status == 'Evaluation 2 Re-evaluate' ? 'selected':''?>>Evaluation 2 Re-evaluate</option>
                                 <option value="Complete" <?=$status == 'Complete' ? 'selected':''?>>Complete</option>
                         </select>
-             
-              
                     <label for="">Year</label>
                     <select class="form-control input-sm" name="year_submitted" id="year_submitted">
                         <?php 
@@ -142,15 +136,10 @@ if (isset($_GET['submit'])) {
                         } 
                         ?>
                     </select>
-                 
-                     
-
                   <label for="">Project Title</label>
                   <input type="text" class="form-control input-sm" name="project_title" value="<?=(isset($_GET['project_title'])? $_GET['project_title']:'');?>">
                 
                   <button type="submit" name="submit">Search</button>
-             
-                  
                 </form>
               </div>
             <div class="row">
@@ -172,15 +161,17 @@ if (isset($_GET['submit'])) {
                         <?php
                           if (isset($_GET['submit'])) { 
                             $department = $_SESSION['department'];
-                            $evaluation = mysqli_query($con,"SELECT e.id, e.project_id, e.evaluation_id, e.evaluation, e.type, e.score, e.attribution, e.interpretation, DATE(e.date_created) AS date_created, p.project_title,p.project_type,p.status FROM evaluation as e left join projects as p on e.project_id = p.id where (p.status = '$status' OR e.evaluation = '$evaluation'   OR p.project_title LIKE '%project_title%') AND YEAR(e.date_created)"); 
+                            if($status){
+                                $evaluation = mysqli_query($con,"SELECT e.id, e.project_id, e.evaluation_id, e.evaluation, e.type, e.score, e.attribution, e.interpretation, DATE(e.date_created) AS date_created, p.project_title,p.project_type,p.status FROM evaluation as e left join projects as p on e.project_id = p.id where (p.status = '$status' AND e.evaluation = '$evaluation'  AND p.project_title LIKE '%project_title%') AND date_created = '$year_submitted'"); 
+                            }else{
+                                $evaluation = mysqli_query($con,"SELECT e.id, e.project_id, e.evaluation_id, e.evaluation, e.type, e.score, e.attribution, e.interpretation, DATE(e.date_created) AS date_created, p.project_title,p.project_type,p.status FROM evaluation as e left join projects as p on e.project_id = p.id where (p.status = '$status' OR e.evaluation = '$evaluation'   OR p.project_title LIKE '%project_title%')"); 
+                            }
                           }else{
                             $department = $_SESSION['department'];
                             $evaluation = mysqli_query($con,"SELECT e.id, e.project_id, e.evaluation_id, e.evaluation, e.type, e.score, e.attribution, e.interpretation, DATE(e.date_created) AS date_created, p.project_title,p.project_type,p.status FROM evaluation as e left join projects as p on e.project_id = p.id "); 
                           }
-                        
-                    
-                        
-                           if (mysqli_num_rows($evaluation) == 0) {
+
+                          if (mysqli_num_rows($evaluation) == 0) {
                             echo "No Evaluation";
                           }
                           while ($value = mysqli_fetch_array($evaluation)) {
@@ -191,16 +182,15 @@ if (isset($_GET['submit'])) {
                               <td class="text-nowrap">'.$value['score'].'</td>
                               <td class="text-nowrap">'.$value['date_created'].'</td>
                               <td class="text-nowrap">'.$value['interpretation'].'</td>
-                              <td class="text-nowrap" style="text-align:right; padding-right:50px;">'.number_format($value['attribution'],2).'</td>
+                              <td class="text-nowrap" style="text-align:right; padding-right:50px;">
+                                <span>&#8369;</span>
+                                <span>'.number_format($value['attribution'],2).'</span>
+                              </td>
                               <td class="text-nowrap" > ';
                               
                               if ($_SESSION["usertype"] == 'Administrator') {
                                 echo'<a class="btn-sm" href="'.($value['evaluation'] == 'Evaluation 1' ? ($value['type'] == 'Infrastructure' ? 'evaluation1_infrastructure_edit.php?pid='.$value['project_id'].'&eid='.$value['evaluation_id']:'evaluation1_generic_edit.php?pid='.$value['project_id'].'&eid='.$value['evaluation_id']):'evaluation2_edit.php?pid='.$value['project_id'].'&eid='.$value['evaluation_id'].'&projecttype='.$value['project_type']).'"><i class="fa fa-pencil"></i> Edit</a>&nbsp;';
                               }
-                              
-                            
-
-
                               echo'<a class="btn-sm" href="'.($value['evaluation'] == 'Evaluation 1' ? ($value['type'] == 'Infrastructure' ? 'evaluation1_infrastructure_view.php?pid='.$value['project_id'].'&eid='.$value['evaluation_id']:'evaluation1_generic_view.php?pid='.$value['project_id'].'&eid='.$value['evaluation_id']):'evaluation2_view.php?pid='.$value['project_id'].'&eid='.$value['evaluation_id'].'&projecttype='.$value['project_type']).'"><i class="fa fa-eye"></i> View</a></td>
                             </tr>';
                           }

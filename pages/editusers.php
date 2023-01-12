@@ -97,7 +97,6 @@ SESSION_START();
             <?php
             $id = $_GET['pid'];
                 $data = mysqli_query($con,"SELECT * FROM users where id = '$id'");
-
                 $info = mysqli_fetch_array($data);
             ?>
             <form id="submit_newusers" enctype="multipart/form-data" method="POST">
@@ -142,14 +141,11 @@ SESSION_START();
                         <input type="text" class="form-control" name="username" value="<?=$info['username']?>"  required>
                     </div>
                 </div>
-               
-
                 <div class="row">
                     <div class="form-group col-md-4"> 
                         <div id="message"> 
                         </div>
-                        
-                        <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                        <button type="submit" name="btn_submit" class="btn btn-primary pull-right">Submit</button>
                         <button type="submit" class="btn btn-primary pull-right resetpassword" style="margin-right:10px;">Reset</button>
                     </div>
                 </div>
@@ -168,7 +164,6 @@ SESSION_START();
     $('#submit_newusers').on('submit', function() {
         event.preventDefault();
         var formData = new FormData($(this)[0]); 
-
         url = '../php/submit_editusers.php';
         fetch(url, {
                 method: 'post',
@@ -180,7 +175,6 @@ SESSION_START();
             .then(response => response.json())
             .then(data => {
                 if (data.status_code == 201) {
-                    
                     location.href="proponents.php";
                     $('#message').html('<p class="text-success">'+data.message+'</p>');
                 } else { 
@@ -188,7 +182,7 @@ SESSION_START();
                 }
             })
             .catch(function(error) {
-
+                console.log(`Error`, error);
             });
     })
     $('.resetpassword').on('click', function() {

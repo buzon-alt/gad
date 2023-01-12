@@ -122,7 +122,6 @@ tr td{
                   <?php   if ($_SESSION['usertype'] == 'Administrator'){?>
                   <label for="">Department</label> 
                   <select class="form-control input-sm" name="department" id="department">
-                    <option value="" ></option>
                     <?php 
                     $departmentlist = mysqli_query($con,"SELECT office FROM users GROUP BY office");
                     while ($value = mysqli_fetch_array($departmentlist)) {  
@@ -192,18 +191,21 @@ tr td{
                       $user_id = $_SESSION['user_id'];
                       if (!isset($_GET['submit'])) {
                         if ($_SESSION['usertype'] == 'Proponent' ) {
-                        
                           $project = mysqli_query($con,"SELECT p.*,u.name FROM proponents LEFT JOIN projects as p ON proponents.project_id = p.id LEFT JOIN users as u ON p.project_leader = u.id where proponents.users_id = '$user_id' AND department = '$department'");
                         }
                         elseif ($_SESSION['usertype'] == 'Department Head') {
                           $project = mysqli_query($con,"SELECT projects.*,u.name FROM projects LEFT JOIN users as u ON projects.project_leader = u.id where  projects.department = '$department'");
                         }else {
-                          $project = mysqli_query($con,"SELECT projects.*,u.name FROM projects LEFT JOIN users as u ON projects.project_leader = u.id ");
+                          $project = mysqli_query($con,"SELECT projects.*,u.name FROM projects LEFT JOIN users as u ON projects.project_leader = u.id");
                         }
-
                       }else{
                         if ( $_SESSION['usertype'] == 'Proponent') {
-                          $project = mysqli_query($con,"SELECT projects.*,u.name FROM projects LEFT JOIN proponents as p ON projects.id = p.project_id LEFT JOIN users as u ON projects.project_leader = u.id where project_title LIKE '%$project_title%' AND department = '$department' AND YEAR(date_submitted) = '$year_submitted' AND  p.users_id = '$user_id'");
+                          // $project = mysqli_query($con,"SELECT projects.*,u.name FROM projects LEFT JOIN proponents as p ON projects.id = p.project_id LEFT JOIN users as u ON projects.project_leader = u.id where project_title LIKE '%$project_title%' AND department = '$department' AND YEAR(date_submitted) = '$year_submitted' AND  p.users_id = '$user_id'");
+                          if($status){
+                            $project = mysqli_query($con,"SELECT projects.*,u.name FROM projects LEFT JOIN users as u ON projects.project_leader = u.id where (projects.department = '$department' AND YEAR(projects.date_submitted) = '$year_submitted'  AND projects.project_title LIKE '%$project_title%') AND status = '$status'");
+                          }else{
+                            $project = mysqli_query($con,"SELECT projects.*,u.name FROM projects LEFT JOIN users as u ON projects.project_leader = u.id where (projects.department = '$department' AND YEAR(projects.date_submitted) = '$year_submitted'  AND projects.project_title LIKE '%$project_title%')");
+                          }
                         }elseif ($_SESSION['usertype'] == 'Department Head') { 
                           // $project = mysqli_query($con,"SELECT projects.*,u.name FROM projects LEFT JOIN proponents as p ON projects.id = p.project_id LEFT JOIN users as u ON projects.project_leader = u.id where project_title LIKE '%$project_title%' AND department = '$department' AND YEAR(date_submitted) = '$year_submitted'  ");
                           if($status){
@@ -215,10 +217,15 @@ tr td{
                           if ($status == 'Ongoing') {
                             $project = mysqli_query($con,"SELECT projects.*,u.name FROM projects LEFT JOIN users as u ON projects.project_leader = u.id where status <> 'Complete' AND status <> 'Pending' ");
                           }else {
-                            $project = mysqli_query($con,"SELECT projects.*,u.name FROM projects LEFT JOIN users as u ON projects.project_leader = u.id where (projects.department = '$department' AND YEAR(projects.date_submitted) = '$year_submitted' AND projects.project_title LIKE '%$project_title%') OR status = '$status' ");
+                            if($status){
+                              $project = mysqli_query($con,"SELECT projects.*,u.name FROM projects LEFT JOIN users as u ON projects.project_leader = u.id where (projects.department = '$department' AND YEAR(projects.date_submitted) = '$year_submitted' AND projects.project_title LIKE '%$project_title%') AND status ='$status'");
+                            }else{
+                              echo $status;
+                              $project = mysqli_query($con,"SELECT projects.*,u.name FROM projects LEFT JOIN users as u ON projects.project_leader = u.id where (projects.department = '$department' AND YEAR(projects.date_submitted) = '$year_submitted' AND projects.project_title LIKE '%$project_title%')");
+                            }
+                            
                           }
                         }
-                        
                       }
  
                         while ($value = mysqli_fetch_array($project)) { 

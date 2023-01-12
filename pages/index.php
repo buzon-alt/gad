@@ -170,7 +170,10 @@ if (empty($_SESSION['id_session'])) {
                         while ($value = mysqli_fetch_array($project)) { 
                           echo '<tr> 
                           <td>'.$value['project_title'].'</td>
-                          <td style="text-align:right;">'.number_format($value['project_cost'],2).'</td>
+                          <td width="13%">
+                            <span>&#8369;</span>
+                            <span>'.number_format($value['project_cost'],2).'</span>
+                          </td>
                           <td>'.$value['department'].'</td>
                           <td>'.$value['name'].'</td>
                           <td>'.$value['project_duration'].'</td>

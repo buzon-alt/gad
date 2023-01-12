@@ -10,11 +10,11 @@
     $contact = $_POST['contact'];
     $email_address = $_POST['email_address']; 
     $usertype = $_POST['usertype'];
-
+    $username = $_POST['username'];
 
     $password = md5("12345");
 
-    mysqli_query($con,"UPDATE users SET name = '$proponents_name',contact = '$contact',office = '$department',email = '$email_address',usertype = '$usertype',password = '$password' where id = '$pid'");
+    mysqli_query($con,"Update users set name = '$proponents_name', username = '$username', contact = '$contact',office = '$department',email = '$email_address',usertype = '$usertype',password = '$password' where id = '$pid'");
     $_SESSION['message'] = "Update proponent successfully added!";
     echo json_encode([
         "message" => "Update proponent successfully save!",

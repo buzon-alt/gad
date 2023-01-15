@@ -1,5 +1,6 @@
 <?php
    require '../controllers/db/connection.php';
+   require './sendEmail.php';
  
 $project_id = $_POST['project_id'];
 $project_type = $_POST['project_type'];
@@ -303,6 +304,7 @@ $id = $eval_id['id'];
 	'$interpretation'
 	)");
 
+sendEmail($_POST['email'], $status, $_POST['project_title']);
 
 echo json_encode([
     "message" => "Evaluation save!",
@@ -311,6 +313,4 @@ echo json_encode([
     "project_type" => $project_type, 
   ]);
 
-
- 
 ?>

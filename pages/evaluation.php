@@ -1,5 +1,6 @@
 <?php require '../controllers/db/connection.php';
 SESSION_START();
+global $projectOwnerEmail;
 ?>
 
 <!DOCTYPE html>
@@ -82,8 +83,8 @@ SESSION_START();
                 <?php
                 if($_SESSION['usertype'] == 'Administrator' && isset($_GET['pid'])){
                     ?>
-                    <a href="evaluation2.php?pid=<?=$_GET['pid']?>&projecttype=<?=$_GET['projecttype']?>" class="btn btn-primary btn-sm pull-right">Evaluation 2</a>
-                    <a href="<?=$_GET['projecttype'] =='Generic'? 'evaluation1_generic.php':'evaluation1_infrastructure.php';?>?pid=<?=$_GET['pid']?>&projecttype=<?=$_GET['projecttype']?>" class="btn btn-primary btn-sm pull-right" style="margin-right:10px;">Evaluation 1</a>
+                    <a href="evaluation2.php?pid=<?=$_GET['pid']?>&projecttype=<?=$_GET['projecttype']?>&proponent=<?=$_GET['proponent']?>" class="btn btn-primary btn-sm pull-right">Evaluation 2</a>
+                    <a href="<?=$_GET['projecttype'] =='Generic'? 'evaluation1_generic.php':'evaluation1_infrastructure.php';?>?pid=<?=$_GET['pid']?>&projecttype=<?=$_GET['projecttype']?>&proponent=<?=$_GET['proponent']?>" class="btn btn-primary btn-sm pull-right" style="margin-right:10px;">Evaluation 1</a>
                     <?php
                 }
                 
@@ -113,14 +114,17 @@ SESSION_START();
                           
                           if (isset($_GET['pid'])) {
                             $pid = $_GET['pid']; 
-                            $evaluation = mysqli_query($con,"SELECT e.id, e.project_id, e.evaluation_id, e.evaluation, e.type, e.score, e.attribution, e.interpretation, DATE(e.date_created) AS date_created, p.project_title,p.project_type FROM evaluation as e  left join projects as p on e.project_id = p.id where e.project_id = $pid"); 
+                            $evaluation = mysqli_query($con,"SELECT e.id, e.project_id, e.evaluation_id, e.evaluation, e.type, e.score, e.attribution, e.interpretation, DATE(e.date_created) AS date_created, p.project_title,p.project_type, p.project_leader FROM evaluation as e  left join projects as p on e.project_id = p.id where e.project_id = $pid"); 
                           }else {  
-                            $evaluation = mysqli_query($con,"SELECT e.id, e.project_id, e.evaluation_id, e.evaluation, e.type, e.score, e.attribution, e.interpretation, DATE(e.date_created) AS date_created, p.project_title,p.project_type FROM evaluation as e left join projects as p on e.project_id = p.id "); 
+                            $evaluation = mysqli_query($con,"SELECT e.id, e.project_id, e.evaluation_id, e.evaluation, e.type, e.score, e.attribution, e.interpretation, DATE(e.date_created) AS date_created, p.project_title,p.project_type, p.project_leader FROM evaluation as e left join projects as p on e.project_id = p.id "); 
                           }
                            if (mysqli_num_rows($evaluation) == 0) {
                             echo "No Evaluation";
                           }
                           while ($value = mysqli_fetch_array($evaluation)) {
+                            $getOwnerEmail = "Select * from users where id = '".$value['project_leader']."'";
+                            $exec = mysqli_query($con, $getOwnerEmail);
+                            $user = mysqli_fetch_assoc($exec);
                             echo '<tr>
                               <td>'.$value['project_title'].'</td>
                               <td>'.$value['evaluation'].'</td>
@@ -133,7 +137,7 @@ SESSION_START();
                               <td>';
                               
                               if ($_SESSION["usertype"] == 'Administrator') {
-                                echo'<a class="btn-sm" href="'.($value['evaluation'] == 'Evaluation 1' ? ($value['type'] == 'Infrastructure' ? 'evaluation1_infrastructure_edit.php?pid='.$value['project_id'].'&eid='.$value['evaluation_id']:'evaluation1_generic_edit.php?pid='.$value['project_id'].'&eid='.$value['evaluation_id']):'evaluation2_edit.php?pid='.$value['project_id'].'&eid='.$value['evaluation_id'].'&projecttype='.$value['project_type']).'"><i class="fa fa-pencil"></i> Edit</a>&nbsp;';
+                                echo'<a class="btn-sm" href="'.($value['evaluation'] == 'Evaluation 1' ? ($value['type'] == 'Infrastructure' ? 'evaluation1_infrastructure_edit.php?pid='.$value['project_id'].'&eid='.$value['evaluation_id']:'evaluation1_generic_edit.php?pid='.$value['project_id'].'&eid='.$value['evaluation_id']):'evaluation2_edit.php?pid='.$value['project_id'].'&eid='.$value['evaluation_id'].'&projecttype='.$value['project_type']).'&proponent='.$user['email'].'"><i class="fa fa-pencil"></i> Edit</a>&nbsp;';
                               }
                               
                             

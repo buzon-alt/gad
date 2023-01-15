@@ -1,5 +1,6 @@
 <?php
    require '../controllers/db/connection.php';
+   require './sendEmail.php';
  
 $e_id = $_POST['e_id'];
 $project_id = $_POST['project_id'];
@@ -92,6 +93,8 @@ $total_score17 = $_POST['total_score17'];
 $alltotal_score = $_POST['alltotal_score'];
 $interpretation = $_POST['interpretation'];
 
+global $projectName;
+global $projectOwnerEmail;
 
 mysqli_query($con,"UPDATE evaluation2 
 	SET
@@ -195,14 +198,22 @@ $attribution = ($budget['project_cost'] * $alltotal_score) / (20 * 1);
 
 mysqli_query($con,"UPDATE evaluation SET score = '$alltotal_score', attribution = '$attribution', interpretation = '$interpretation' WHERE evaluation_id = '$e_id'"); 
 
+$projectOwnerId = "Select * from projects where id = '".$project_id."'";
+$executeQuery = mysqli_query($con, $projectOwnerId);
+while($row = mysqli_fetch_assoc($executeQuery)){
+	$projectName = $row['project_title'];
+}
+
+sendEmail($_POST['proponent'], $status, $projectName);
 
 echo json_encode([
     "message" => "Evaluation save!",
     "status_code" => 201, 
     "project_id" => $project_id, 
     "project_type" => $project_type, 
+	"project_name" => $projectName,
+	"project_ownerEmail"=> $projectOwnerEmail,
   ]);
 
-
- 
+  
 ?>

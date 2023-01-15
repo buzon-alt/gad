@@ -1,6 +1,7 @@
 <?php require '../controllers/db/connection.php';
 SESSION_START(); 
  
+global $projectname;
 
 $eid = $_GET['eid'];
 $pid = $_GET['pid'];
@@ -106,6 +107,8 @@ $status = $projectname['status'];
                     <input type="hidden" name="project_id" value="<?=$_GET['pid']?>">
                     <input type="hidden" name="e_id" value="<?=$_GET['eid']?>">
                     <input type="hidden" name="project_type" value="<?=$_GET['projecttype']?>">
+                    <input type="hidden" value="<?=$projectname?>" id="project_name">
+                    <input type="hidden" name="proponent" value="<?=$_GET['proponent']?>">
                     <div class="col-md-12">
                         <h5><b>Instruction:</b>Put a check in the appropriate column to signify the degree to which a project proponent has accomplished with each GAD criterion. Under column 2a if nothing has been done; under column 2b if the dimension or question has been partly accomplished or complied with; and column 2c if the item has been fully complied with. </h5>
                         <b><center>Box. 16 GAD Checklist for Project Management and Implementation</center></b>
@@ -740,7 +743,7 @@ $status = $projectname['status'];
                         <input type="hidden" name="interpretation" id="interpretation" value="<?=$value['interpretation']?>">
                         <center>
                             <h3 id="interpretationtext"><?=$value['interpretation']?></h3>
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" name="btn_submit" class="btn btn-primary">Submit</button>
                             <br><br><br>
 
                         </center>
@@ -831,8 +834,11 @@ $status = $projectname['status'];
             interpretation = "Proposed project is gender-sensitive.";
         } else if (total_score > 15) {
             interpretation = "Proposed project is gender-responsive.";
+            
         }
-        let attribution = parseFloat((<?php echo $projectname['project_cost']?> * total_score) / (20 * 1)).toFixed(2); 
+
+        const project_name = $('#project_name').val()
+        let attribution = parseFloat((project_name * total_score) / (20 * 1)).toFixed(2); 
         
         $("#attribution").val(attribution);
 
@@ -840,8 +846,6 @@ $status = $projectname['status'];
         $("#interpretation").val(interpretation);
         $("#interpretationtext").text(interpretation);
     });
-
- 
 
 
     $('#submit_evaluation2').on('submit', function() {

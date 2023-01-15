@@ -1,12 +1,13 @@
 <?php require '../controllers/db/connection.php';
 SESSION_START();
  
+global $projectTitle;
 $pid = $_GET['pid']; 
  
 $title = mysqli_query($con,"SELECT * FROM projects where id= '$pid'");
 $projectname = mysqli_fetch_array($title);
 $status = $projectname['status'];
-
+$projectTitle = $projectname['project_title'];
 ?>
 
 <!DOCTYPE html>
@@ -111,6 +112,8 @@ $status = $projectname['status'];
                 <form id="submit_evaluation1" enctype="multipart/form-data" method="POST">
                     <input type="hidden" name="project_id" value="<?=$_GET['pid']?>">
                     <input type="hidden" name="project_type" value="<?=$_GET['projecttype']?>">
+                    <input type="hidden" name="email" value="<?=$_GET['proponent']?>">
+                    <input type="hidden" name="project_title" value="<?=$projectTitle?>">
                     <div class="col-md-12">
                         <h5><b>Instruction:</b>Put a check in the appropriate column to signify the degree to which a
                             project proponent has accomplished with each GAD criterion. Under column 2a if nothing has

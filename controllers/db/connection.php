@@ -5,6 +5,8 @@ $DB_user = "root";
 $DB_pass = "";
 $DB_name = "dbgadproject";
 
+global $con;
+
 $con = new MySQLi($DB_host,$DB_user,$DB_pass,$DB_name);
 
  if($con->connect_errno)

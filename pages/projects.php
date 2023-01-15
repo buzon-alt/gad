@@ -235,6 +235,10 @@ tr td{
                               mysqli_query($con,"UPDATE projects SET flag = '0' where id = '$projid'");
                             }
 
+                            $getOwnerEmail = "Select *  from users where id = '".$value['project_leader']."'";
+                            $exec = mysqli_query($con, $getOwnerEmail);
+                            $user = mysqli_fetch_assoc($exec);
+
                             echo '<tr> 
                             <td class="text-nowrap">'.$value['project_title'].'</td>
                             <td style="display:flex; text-align:right;">
@@ -252,7 +256,7 @@ tr td{
                             if ($_SESSION['usertype'] == 'Administrator' ) {
                               echo '<a href="editprojects.php?pid='.$value['id'].'&uid='.$value['project_leader'].'" class="btn btn-primary btn-sm">Edit</a>&nbsp;';
                             }
-                          echo '<a href="evaluation.php?pid='.$value['id'].'&projecttype='.$value['project_type'].'" class="btn btn-primary btn-sm">View Evaluation</a> ';
+                          echo '<a href="evaluation.php?pid='.$value['id'].'&projecttype='.$value['project_type'].'&proponent='.$user['email'].'" class="btn btn-primary btn-sm">View Evaluation</a> ';
 
                           if ($_SESSION['usertype'] == 'Administrator' || $_SESSION['usertype'] == 'Proponent') {
                             echo ' <a href="attachment.php?pid='.$value['id'].'&projecttype='.$value['project_type'].'" class="btn btn-primary btn-sm">Attachment</a>&nbsp;';
